@@ -1,0 +1,10 @@
+# files
+node_modules
+dist
+
+# environments
+.env
+
+# event logger
+newrelic_agent.log
+logs

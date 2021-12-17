@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": false,
+    "incremental": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "useDefineForClassFields": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@shared/*": ["src/shared/*"],
+      "@config/*": ["src/config/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@core/*": ["src/core/*"],
+      "@providers/*": ["src/providers/*"]
+    }
+  }
+}
