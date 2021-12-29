@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user_logins {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  userId    Int      @db.UnsignedInt
+  device    String   @db.VarChar(255)
+  location  String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @db.Timestamp(0)
+  users     users    @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "user_logins_userid_foreign")
+
+  @@index([userId], map: "user_logins_userid_foreign")
+}
+
+model users {
+  id          Int           @id @default(autoincrement()) @db.UnsignedInt
+  name        String        @db.VarChar(255)
+  phoneNumber String        @db.VarChar(255)
+  email       String?       @db.VarChar(255)
+  createdAt   DateTime      @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime      @default(now()) @db.Timestamp(0)
+  user_logins user_logins[]
+}

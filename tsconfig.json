@@ -24,7 +24,8 @@
       "@config/*": ["src/config/*"],
       "@repositories/*": ["src/repositories/*"],
       "@core/*": ["src/core/*"],
-      "@providers/*": ["src/providers/*"]
+      "@providers/*": ["src/providers/*"],
+      "@database/*": ["src/database/*"]
     }
   }
 }

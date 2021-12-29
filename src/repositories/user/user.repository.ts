@@ -1,28 +1,30 @@
-import { EntityManager, EntityRepository } from '@mikro-orm/mariadb';
 import { IUserRepository } from './interfaces/user.repository.interface';
 import { BaseRepository } from '@repositories/base.repository';
 import { UserSchema } from './schemas/user.schema';
 import { User } from '@core/user/entities/user.entity';
+import { EntityManager } from '@repositories/unit-of-work/entity-manager';
 
 export class UserRepository
-  extends BaseRepository<UserSchema>
+  extends BaseRepository<User, UserSchema>
   implements IUserRepository
 {
-  protected repository: EntityRepository<UserSchema>;
-  constructor(em: EntityManager) {
+  protected entityIdKeys = ['id'];
+
+  constructor(private em: EntityManager) {
     super();
-    this.repository = em.getRepository(UserSchema);
   }
 
   async getById(id: number): Promise<User | null> {
-    const user = await this.repository.findOne({ id });
+    const user = await this.em.query.users.findUnique({ where: { id } });
     if (!user) return null;
 
     return this.mapperToEntity(User, user);
   }
 
   async getByPhone(phoneNumber: string): Promise<User | null> {
-    const user = await this.repository.findOne({ phoneNumber });
+    const user = await this.em.query.users.findFirst({
+      where: { phoneNumber },
+    });
     if (!user) return null;
 
     return this.mapperToEntity(User, user);
@@ -30,11 +32,17 @@ export class UserRepository
 
   async save(user: User): Promise<void> {
     if (user.id) {
-      const refUser = this.repository.getReference(user.id);
-      const userToUpdate = this.repository.assign(refUser, { ...user });
-      this.repository.persist(userToUpdate);
+      const propertyToUpdate = this.propertyToUpdate(user);
+      if (propertyToUpdate) {
+        await this.em.query.users.update({
+          data: propertyToUpdate,
+          where: { id: user.id },
+        });
+      }
     } else {
-      const id = await this.repository.nativeInsert({ ...user });
+      const { id } = await this.em.query.users.create({
+        data: { ...user } as UserSchema,
+      });
       user.id = id;
     }
   }

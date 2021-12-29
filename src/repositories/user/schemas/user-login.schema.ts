@@ -1,20 +1,6 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { user_logins } from '@prisma/client';
+
 import { UserSchema } from './user.schema';
-
-@Entity({ tableName: 'user_logins' })
-export class UserLoginSchema {
-  @PrimaryKey()
-  id!: number;
-
-  @Property()
-  userId!: number;
-
-  @Property()
-  device!: string;
-
-  @Property()
-  location!: string | null;
-
-  @ManyToOne(() => UserSchema, { persist: false, mapToPk: true })
+export interface UserLoginSchema extends user_logins {
   user?: UserSchema;
 }

@@ -1,13 +1,9 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Module, Scope } from '@nestjs/common';
-import mikroOrmConfig from './mikro-orm.config';
+import { Module } from '@nestjs/common';
+import { PrismaConnectService } from './prisma-connect/prisma-connect.service';
 
 @Module({
-  imports: [
-    MikroOrmModule.forRoot({
-      scope: Scope.REQUEST,
-      ...mikroOrmConfig,
-    }),
-  ],
+  imports: [],
+  exports: [PrismaConnectService],
+  providers: [PrismaConnectService],
 })
 export class DatabaseModule {}
